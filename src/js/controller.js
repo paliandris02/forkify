@@ -6,22 +6,13 @@ import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 ///////////////////////////////////////
 ("ea5631ba-f202-4954-ba4a-9e2fe27ceb0c");
 const recipeContainer = document.querySelector(".recipe");
-const renderSpinner = function (parent) {
-  const markup = `
-  <div class="spinner">
-    <svg>
-      <use href="${icons}#icon-loader"></use>
-    </svg>
-  </div>`;
-  parent.innerHTML = "";
-  parent.insertAdjacentHTML("afterbegin", markup);
-};
+
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1);
@@ -50,7 +41,7 @@ const controlSearchResults = async function () {
     // 2)  load search results
     await model.loadSearchResults(query);
     // 3) render results
-    resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
   } catch (error) {
     recipeView.renderError(error);
     console.log(error);
