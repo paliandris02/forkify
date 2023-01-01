@@ -12,7 +12,15 @@ class RecipeView extends View {
       window.addEventListener(e, handler);
     });
   }
-
+  addHandlerServings(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".btn--update-servings");
+      if (!btn) return;
+      const updateTo = +btn.dataset.updateTo;
+      if (updateTo <= 0) return;
+      handler(updateTo);
+    });
+  }
   _generateMarkup() {
     return `<figure class="recipe__fig">
     <img src="${this._data.image}" alt="${
@@ -43,15 +51,15 @@ class RecipeView extends View {
       <span class="recipe__info-text">servings</span>
 
       <div class="recipe__info-buttons">
-        <button class="btn--tiny btn--increase-servings">
-          <svg>
-            <use href=${icons}#icon-minus-circle"></use>
-          </svg>
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings - 1
+        }">
+          -
         </button>
-        <button class="btn--tiny btn--increase-servings">
-          <svg>
-            <use href=${icons}#icon-plus-circle"></use>
-          </svg>
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings + 1
+        }">
+          +
         </button>
       </div>
     </div>
