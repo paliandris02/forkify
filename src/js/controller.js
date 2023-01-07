@@ -8,7 +8,7 @@ import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
 import bookmarksView from "./views/bookmarkView.js";
 import addRecipeView from "./views/addRecipeView.js";
-
+import { MODAL_CLOSE_SEC } from "./config.js ";
 // if (module.hot) {
 //   module.hot.accept();
 // }
@@ -86,9 +86,29 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (newRecipe) {
+const controlAddRecipe = async function (newRecipe) {
   try {
-    model.uploadRecipe(newRecipe);
+    //
+    addRecipeView.renderSpinner();
+
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    //render recipe
+    recipeView.render(model.state.recipe);
+
+    //Succes message
+    addRecipeView.renderMessage();
+
+    bookmarksView.render(model.state.bookmarks);
+
+    //change id in the url
+    window.history.pushState(null, "", `#${model.state.recipe.id}`);
+
+    //close form
+    setTimeout(() => {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
   } catch (error) {
     console.error(error);
     addRecipeView.renderError(error.message);
